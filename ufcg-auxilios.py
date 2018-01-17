@@ -134,24 +134,6 @@ HEAD = """
 <div class="col-md-12">
 """
 
-TABS = """
-<div class="tabbable" id="tabs-554919">
-<ul class="nav nav-tabs">
-<li class="active">
-<a href="#panel-1" data-toggle="tab">Editais</a>
-</li>
-<li>
-<a href="#panel-2" data-toggle="tab">Resultados</a>
-</li>
-<li>
-<a href="#panel-3" data-toggle="tab">Comunicados</a>
-</li>
-<li>
-<a href="#panel-4" data-toggle="tab">Diversos</a>
-</li>
-</ul>
-"""
-
 FOOT = """
 </div>
 </div>
