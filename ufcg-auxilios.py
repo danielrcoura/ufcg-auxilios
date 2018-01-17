@@ -39,10 +39,8 @@ def count_news(request):
 
 
 def delegate(start, qtd_news):
-    editais = ''
-    resultados = ''
-    comunicados = ''
-    diversos = ''
+    editais = resultados = comunicados = diversos = ''
+    qtd_e = qtd_r = qtd_c = qtd_d = 0
 
     while True:
         linha, start, status = find_linha(request, start + 1)
@@ -50,11 +48,13 @@ def delegate(start, qtd_news):
         if status == -1:
             break
 
+        is_new = False
         if status != -2:
             conteudo = ''
             if qtd_news != 0:
                 qtd_news -= 1
                 conteudo += "<tr class='active'>"
+                is_new = True
             else:
                 conteudo += '<tr>'
 
@@ -62,14 +62,40 @@ def delegate(start, qtd_news):
 
             if status == 1:
                 editais += conteudo
+                if is_new:
+                    qtd_e += 1
             elif status == 2:
                 resultados += conteudo
+                if is_new:
+                    qtd_r += 1
             elif status == 3:
                 comunicados += conteudo
-            elif status == 4:
+                if is_new:
+                    qtd_c += 1
+            else:
                 diversos += conteudo
+                if is_new:
+                    qtd_d += 1
 
-    return editais, resultados, comunicados, diversos
+    return [editais, resultados, comunicados, diversos], [qtd_e, qtd_r, qtd_c, qtd_d]
+
+
+def draw_tabs(qtd_news):
+    classes = ['Editais ', 'Resultados ', 'Comunicados ', 'Diversos ']
+    tabs = "<div class='tabbable' id='tabs-554919'><ul class='nav nav-tabs'>"
+    for i in xrange(4):
+        if i == 0:
+            tabs += "<li class='active'>"
+        else:
+            tabs += "<li>"
+        if qtd_news[i] == 0:
+            qtd_news[i] = ''
+        tabs += "<a href='#panel-" + \
+            str(i + 1) + "' data-toggle='tab'>" + \
+            classes[i] + "<strong>" + str(qtd_news[i]) + "</strong></a></li>"
+    tabs += '</ul>'
+
+    return tabs
 
 
 def divide_tabs(tabs):
@@ -151,12 +177,12 @@ Editais de auxílio <span style="font-size:20px; color:gray;">
 </div>
 """
 
-content = (HEAD + TITLE + TABS).decode('utf-8', 'ignore')
+content = (HEAD + TITLE).decode('utf-8', 'ignore')
 
-tabs = delegate(string.find(request, '<body>'), qtd_news)
-divs = divide_tabs(tabs)
+content_tabs, qtd_news = delegate(string.find(request, '<body>'), qtd_news)
 
-content += divs
+content += draw_tabs(qtd_news)
+content += divide_tabs(content_tabs)
 content += FOOT
 
 arq = open('index.html', 'w')
