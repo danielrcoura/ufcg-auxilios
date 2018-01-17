@@ -7,5 +7,5 @@ Lista editais em uma página web e envia emails referentes aos auxílios da UFCG
 
 ## Enviar Email
 Adicione o seu email e senha respectivamente na primeira e segunda linha do arquivo email.txt e execute o comando:
-```python send-email.py```
+```python send-email.py```  
 Dica: você pode programar seu sistema para executar o script diariamente
